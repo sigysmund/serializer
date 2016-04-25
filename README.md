@@ -16,3 +16,10 @@ To install this fork of `jms/serializer`, you've to override the original reposi
         }
     ]
 ```
+
+## Notice for @schmittjoh
+I hate to fork the library instead of getting the original up to speed.
+
+In a perfect world, I'd like to move the original repository to an organization, add a few contributors and work through all of the issues / PR's.
+
+It mustn't be that the most popular serializing library for PHP is unmaintained.
