@@ -1,5 +1,8 @@
 {
-    "name": "jms/serializer",
+    "name": "jms-serializer/serializer",
+    "replace": {
+        "jms/serializer": "1.*"
+    },
     "type": "library",
     "description": "Library for (de-)serializing data of any complexity; supports XML, JSON, and YAML.",
     "keywords": ["serialization", "deserialization", "json", "jaxb", "xml"],
