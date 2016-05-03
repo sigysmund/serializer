@@ -35,7 +35,7 @@ use PhpCollection\MapInterface;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class Serializer implements SerializerInterface
+class Serializer implements SerializerInterface, NormalizerInterface
 {
     private $factory;
     private $handlerRegistry;
@@ -122,13 +122,7 @@ class Serializer implements SerializerInterface
     }
 
     /**
-     * Converts objects to an array structure.
-     *
-     * This is useful when the data needs to be passed on to other methods which expect array data.
-     *
-     * @param mixed $data anything that converts to an array, typically an object or an array of objects
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray($data, SerializationContext $context = null)
     {
@@ -156,12 +150,7 @@ class Serializer implements SerializerInterface
     }
 
     /**
-     * Restores objects from an array structure.
-     *
-     * @param array $data
-     * @param string $type
-     *
-     * @return mixed this returns whatever the passed type is, typically an object or an array of objects
+     * {@inheritdoc}
      */
     public function fromArray(array $data, $type, DeserializationContext $context = null)
     {
