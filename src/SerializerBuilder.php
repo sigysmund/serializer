@@ -40,6 +40,10 @@ use JMS\Serializer\Construction\ObjectConstructorInterface;
 use JMS\Serializer\EventDispatcher\Subscriber\DoctrineProxySubscriber;
 use JMS\Serializer\Naming\CamelCaseNamingStrategy;
 use JMS\Serializer\Naming\PropertyNamingStrategyInterface;
+use JMS\Serializer\ContextFactory\SerializationContextFactoryInterface;
+use JMS\Serializer\ContextFactory\DeserializationContextFactoryInterface;
+use JMS\Serializer\ContextFactory\CallableSerializationContextFactory;
+use JMS\Serializer\ContextFactory\CallableDeserializationContextFactory;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\FileCacheReader;
@@ -72,6 +76,8 @@ class SerializerBuilder
     private $annotationReader;
     private $includeInterfaceMetadata = false;
     private $driverFactory;
+    private $defaultSerializationContextFactory;
+    private $defaultDeserializationContextFactory;
 
     public static function create()
     {
@@ -333,6 +339,46 @@ class SerializerBuilder
         return $this;
     }
 
+    /**
+     * @param SerializationContextFactoryInterface|callable $defaultSerializationContextFactory
+     *
+     * @return self
+     */
+    public function setDefaultSerializationContextFactory($defaultSerializationContextFactory)
+    {
+        if ($defaultSerializationContextFactory instanceof SerializationContextFactoryInterface) {
+            $this->defaultSerializationContextFactory = $defaultSerializationContextFactory;
+        } elseif (is_callable($defaultSerializationContextFactory)) {
+            $this->defaultSerializationContextFactory = new CallableSerializationContextFactory(
+                $defaultSerializationContextFactory
+            );
+        } else {
+            throw new InvalidArgumentException('expected SerializationContextFactoryInterface or callable.');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param DeserializationContextFactoryInterface|callable $defaultDeserializationContextFactory
+     *
+     * @return self
+     */
+    public function setDefaultDeserializationContextFactory($defaultDeserializationContextFactory)
+    {
+        if ($defaultDeserializationContextFactory instanceof DeserializationContextFactoryInterface) {
+            $this->defaultDeserializationContextFactory = $defaultDeserializationContextFactory;
+        } elseif (is_callable($defaultDeserializationContextFactory)) {
+            $this->defaultDeserializationContextFactory = new CallableDeserializationContextFactory(
+                $defaultDeserializationContextFactory
+            );
+        } else {
+            throw new InvalidArgumentException('expected DeserializationContextFactoryInterface or callable.');
+        }
+
+        return $this;
+    }
+
     public function build()
     {
         $annotationReader = $this->annotationReader;
@@ -368,7 +414,7 @@ class SerializerBuilder
             $this->addDefaultDeserializationVisitors();
         }
 
-        return new Serializer(
+        $serializer = new Serializer(
             $metadataFactory,
             $this->handlerRegistry,
             $this->objectConstructor ?: new UnserializeObjectConstructor(),
@@ -376,6 +422,16 @@ class SerializerBuilder
             $this->deserializationVisitors,
             $this->eventDispatcher
         );
+
+        if (null !== $this->defaultSerializationContextFactory) {
+            $serializer->setDefaultSerializationContextFactory($this->defaultSerializationContextFactory);
+        }
+
+        if (null !== $this->defaultDeserializationContextFactory) {
+            $serializer->setDefaultDeserializationContextFactory($this->defaultDeserializationContextFactory);
+        }
+
+        return $serializer;
     }
 
     private function initializePropertyNamingStrategy()
