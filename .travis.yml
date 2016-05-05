@@ -1,22 +1,18 @@
 language: php
-
 php:
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
-
+- 5.5
+- 5.6
+- 7.0
+- hhvm
 matrix:
   allow_failures:
-    - php: hhvm
-
+  - php: hhvm
 before_script:
-    - composer self-update
-    - composer install --dev --no-interaction
-
-script: vendor/bin/phpunit --coverage-clover clover
-
+- composer self-update
+- composer install --dev --no-interaction
+script: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 after_success:
-    - wget https://scrutinizer-ci.com/ocular.phar
-    - php ocular.phar code-coverage:upload --format=php-clover clover
-
+- ./vendor/bin/test-reporter
+addons:
+  code_climate:
+    repo_token: a656121b23a8297f05a8b5b6c128e4a00b9cbe665ae8a87cc147b1a007dbf002
