@@ -104,7 +104,10 @@ final class GraphNavigator
         }
         // If the data is null, we have to force the type to null regardless of the input in order to
         // guarantee correct handling of null values, and not have any internal auto-casting behavior.
-        else if ($context instanceof SerializationContext && null === $data) {
+        //else if ($context instanceof SerializationContext && null === $data) {
+
+        // Seems Deserialization may have data inputs as NULL, and handling normally (#DiscriminatorCase).
+        else if (null === $data) {
             $type = array('name' => 'NULL', 'params' => array());
         }
 
