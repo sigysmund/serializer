@@ -39,7 +39,7 @@ class FormErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $this->handler = new FormErrorHandler(new Translator('en'));
         $this->visitor = new JsonSerializationVisitor(new SerializedNameAnnotationStrategy(new CamelCaseNamingStrategy()));
         $this->dispatcher = new EventDispatcher();
-        $this->factory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->factory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
     }
 
     protected function tearDown()
@@ -90,8 +90,8 @@ class FormErrorHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getMockForm($name = 'name')
     {
-        $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $config = $this->getMock('Symfony\Component\Form\FormConfigInterface');
+        $form = $this->createMock('Symfony\Component\Form\Test\FormInterface');
+        $config = $this->createMock('Symfony\Component\Form\FormConfigInterface');
 
         $form->expects($this->any())
             ->method('getName')

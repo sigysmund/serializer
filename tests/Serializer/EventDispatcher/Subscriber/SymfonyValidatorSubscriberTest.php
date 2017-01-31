@@ -102,7 +102,7 @@ class SymfonyValidatorSubscriberTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->validator = $this->getMock('Symfony\Component\Validator\ValidatorInterface');
+        $this->validator = $this->createMock('Symfony\Component\Validator\ValidatorInterface');
         $this->subscriber = new SymfonyValidatorSubscriber($this->validator);
     }
 }

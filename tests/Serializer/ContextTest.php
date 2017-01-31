@@ -40,7 +40,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
         $self = $this;
 
-        $exclusionStrategy = $this->getMock('JMS\Serializer\Exclusion\ExclusionStrategyInterface');
+        $exclusionStrategy = $this->createMock('JMS\Serializer\Exclusion\ExclusionStrategyInterface');
         $exclusionStrategy->expects($this->any())
             ->method('shouldSkipClass')
             ->with($this->anything(), $this->callback(function (SerializationContext $context) use ($self, $objects) {
@@ -105,7 +105,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         ));
         $self = $this;
 
-        $exclusionStrategy = $this->getMock('JMS\Serializer\Exclusion\ExclusionStrategyInterface');
+        $exclusionStrategy = $this->createMock('JMS\Serializer\Exclusion\ExclusionStrategyInterface');
         $exclusionStrategy->expects($this->any())
             ->method('shouldSkipClass')
             ->will($this->returnCallback(function (ClassMetadata $classMetadata, SerializationContext $context) use ($self, $object, $child) {

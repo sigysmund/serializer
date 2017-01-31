@@ -102,7 +102,7 @@ class DoctrinePHPCRDriverTest extends \PHPUnit_Framework_TestCase
             new DoctrinePHPCRDriver(new AnnotationReader(), __DIR__.'/../../Fixtures/DoctrinePHPCR')
         );
 
-        $session = $this->getMock('PHPCR\SessionInterface');
+        $session = $this->createMock('PHPCR\SessionInterface');
 
         return DocumentManager::create($session, $config);
     }
@@ -114,7 +114,7 @@ class DoctrinePHPCRDriverTest extends \PHPUnit_Framework_TestCase
 
     protected function getDoctrinePHPCRDriver()
     {
-        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $registry->expects($this->atLeastOnce())
              ->method('getManagerForClass')
              ->will($this->returnValue($this->getDocumentManager()));
